@@ -1,11 +1,17 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { deleteUser } from "./UserReducer";
 
 function Home() {
     const users = useSelector((state) => state.users);
-    console.log(users);
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const handleDelete = (id) => {
+        dispatch(deleteUser({ id }));
+    };
     return (
         <div className="container">
             <h2>Crud App with Json Server</h2>
@@ -28,10 +34,16 @@ function Home() {
                             <td>{user.name}</td>
                             <td>{user.email}</td>
                             <td>
-                                <button className="btn btn-sm btn-primary">
+                                <Link
+                                    to={`/edit/${user.id}`}
+                                    className="btn btn-sm btn-primary"
+                                >
                                     Edit
-                                </button>
-                                <button className="btn btn-sm btn-danger ms-2">
+                                </Link>
+                                <button
+                                    onClick={() => handleDelete(user.id)}
+                                    className="btn btn-sm btn-danger ms-2"
+                                >
                                     Delete
                                 </button>
                             </td>
